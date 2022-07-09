@@ -54,6 +54,8 @@ namespace ShareX.ScreenCaptureLib
 
         public void Update()
         {
+            return;     //Don't show scroll bar in image editor
+
             if (AutoHide)
             {
                 RectangleF imageRectangle = form.CanvasRectangle.Scale(form.ZoomFactor);

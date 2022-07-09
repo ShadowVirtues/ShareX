@@ -459,7 +459,7 @@ namespace ShareX.ScreenCaptureLib
                 }
                 else
                 {
-                    Form.CloseWindow();
+                    //Form.CloseWindow();   //Don't close Image Editor on RMB
                 }
             }
             else if (e.Button == MouseButtons.Middle)
@@ -501,6 +501,8 @@ namespace ShareX.ScreenCaptureLib
 
         private void form_MouseWheel(object sender, MouseEventArgs e)
         {
+            return; //This initially procs scrollbar move, which we disabled in ImageEditorScrollbar
+
             if (Control.ModifierKeys == Keys.None)
             {
                 if (e.Delta > 0)
@@ -539,6 +541,13 @@ namespace ShareX.ScreenCaptureLib
             // 1. initiate exit if region selection is active
             // 2. if a shape is selected, unselect it
             // 3. switch to the select tool if a any other tool is active
+
+            //These are all the bools that get checked when we close region capture with RMB. Replicated the same for Esc, since it didn't work there
+            if (IsCreating == false && Form.IsAnnotationMode && IsShapeIntersect() == false && Form.IsEditorMode == false)
+            {
+                Form.CloseWindow();
+                return true;
+            }
 
             switch (CurrentTool)
             {
@@ -881,10 +890,10 @@ namespace ShareX.ScreenCaptureLib
                     }
                     else if (Form.IsEditorMode)
                     {
-                        if (Form.ShowExitConfirmation())
-                        {
-                            Form.CloseWindow(RegionResult.AnnotateContinueTask);
-                        }
+                        //if (Form.ShowExitConfirmation())  //Don't close Image Editor on RMB
+                        //{
+                        //    Form.CloseWindow(RegionResult.AnnotateContinueTask);
+                        //}
                     }
                     else
                     {

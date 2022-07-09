@@ -221,7 +221,7 @@ namespace ShareX.ScreenCaptureLib
             else
             {
                 FormBorderStyle = FormBorderStyle.Sizable;
-                MinimumSize = new Size(800, 550);
+                MinimumSize = new Size(1000, 550);  //So toolbar doesn't get shrank
 
                 if (Options.ImageEditorStartMode == ImageEditorStartMode.PreviousState)
                 {
@@ -294,7 +294,7 @@ namespace ShareX.ScreenCaptureLib
                     title.AppendFormat(" - {0}x{1}", Canvas.Width, Canvas.Height);
                 }
 
-                if (IsZoomed)
+                //if (IsZoomed) //Always show percent zoom, so you can be sure it's 100% when it is 100
                 {
                     int zoomPercentage = (int)Math.Round(ZoomFactor * 100);
                     title.AppendFormat(" ({0}%)", zoomPercentage);
@@ -553,7 +553,7 @@ namespace ShareX.ScreenCaptureLib
                     editorPanTipAnimation.Start();
                 }
 
-                if (Options.ZoomToFitOnOpen)
+                if (Options.ZoomToFitOnOpen && DoesCanvasNeedZoom())    //Fit on initial window open only if actually need it 
                 {
                     ZoomToFit();
                 }
@@ -622,10 +622,10 @@ namespace ShareX.ScreenCaptureLib
                     return;
                 }
 
-                if (!IsEditorMode || ShowExitConfirmation())
-                {
-                    CloseWindow();
-                }
+                //if (!IsEditorMode || ShowExitConfirmation())  //Don't close window on Esc
+                //{
+                //    CloseWindow();
+                //}
 
                 return;
             }
@@ -640,7 +640,8 @@ namespace ShareX.ScreenCaptureLib
             switch (e.KeyData)
             {
                 case Keys.Space:
-                    CloseWindow(RegionResult.Fullscreen);
+                    //CloseWindow(RegionResult.Fullscreen);     //Don't close window on Space
+                    SpaceButtonFitOr100();          //Instead fit or 100% zoom the screenshot
                     break;
                 case Keys.Enter:
                     if (ShapeManager.IsCurrentShapeTypeRegion)
@@ -649,13 +650,16 @@ namespace ShareX.ScreenCaptureLib
                         ShapeManager.EndRegionSelection();
                     }
 
-                    CloseWindow(RegionResult.Region);
+                    //CloseWindow(RegionResult.Region);     //Don't close window on Enter
                     break;
                 case Keys.Oemtilde:
-                    CloseWindow(RegionResult.ActiveMonitor);
+                    //CloseWindow(RegionResult.ActiveMonitor);  //Don't close window on Tilde (wtf)
                     break;
                 case Keys.Control | Keys.C:
-                    CopyAreaInfo();
+                    using (Bitmap bmp = GetResultImage())       //Copy image to clipboard on Ctrl+C
+                    {
+                        OnCopyImageRequested(bmp);
+                    }
                     break;
             }
 
@@ -669,6 +673,7 @@ namespace ShareX.ScreenCaptureLib
                     case Keys.Control | Keys.D0:
                         ZoomFactor = 1;
                         CenterCanvas();
+                        UpdateTitle();  //Since we show 100% zoom in title
                         break;
                     case Keys.Control | Keys.Oemplus:
                         Zoom(true, false);
@@ -705,7 +710,7 @@ namespace ShareX.ScreenCaptureLib
 
         private void RegionCaptureForm_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (IsEditorMode && ModifierKeys == Keys.Control)
+            if (IsEditorMode/* && ModifierKeys == Keys.Control*/)       //Zoom with mouse wheel without Ctrl
             {
                 Zoom(e.Delta > 0);
             }
@@ -762,6 +767,7 @@ namespace ShareX.ScreenCaptureLib
             ZoomFactor = Math.Min(ClientArea.Width / CanvasRectangle.Width, (ClientArea.Height - ToolbarHeight) / CanvasRectangle.Height);
 
             CenterCanvas();
+            UpdateTitle();      //Zooming to fit needs to update the title zoom
         }
 
         private void MonitorKey(int index)
@@ -783,6 +789,23 @@ namespace ShareX.ScreenCaptureLib
             Result = result;
             forceClose = true;
             Close();
+        }
+
+        private bool DoesCanvasNeedZoom() => Canvas.Width > ClientSize.Width || Canvas.Height > ClientSize.Height - ToolbarHeight;
+
+        private void SpaceButtonFitOr100()
+        {
+            if (IsZoomed)   //If not at 100% zoom, Space button makes it 100%
+            {
+                ZoomFactor = 1;
+                CenterCanvas();
+                UpdateTitle();
+            }
+            else if (DoesCanvasNeedZoom())  //If at 100% zoom and it needs zoom, then make fit the canvas
+            {
+                ZoomToFit();
+            }
+
         }
 
         internal void Pause()
