@@ -595,6 +595,8 @@ namespace ShareX.ScreenCaptureLib
                 {
                     Options.ImageEditorWindowState.UpdateFormState(this);
                 }
+
+                SaveImageToTemp();
             }
         }
 
@@ -1607,6 +1609,18 @@ namespace ShareX.ScreenCaptureLib
                     ShapeManager.ShowMenuTooltip(Resources.ImageSaved);
                     ShapeManager.IsImageModified = false;
                 }
+            }
+        }
+
+        private void SaveImageToTemp()
+        {
+            Bitmap bmp = ReceiveImageForTask();
+            string folder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\ShareX\\Screenshots";
+            string fileName = $"{DateTime.Now:yyyy.MM.dd HH.mm.ss-ff}.png";
+            if (System.IO.Directory.Exists(folder))
+            {
+                string path = $"{folder}\\{fileName}";
+                ImageHelpers.SaveImage(bmp, path);
             }
         }
 
