@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2022 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 #endregion License Information (GPL v3)
 
 using ShareX.HelpersLib.Properties;
-using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
@@ -40,8 +39,7 @@ namespace ShareX.HelpersLib
         {
             get
             {
-                Version version = Version.Parse(Application.ProductVersion);
-                return $"{Name}/{version.Major}.{version.Minor}.{version.Build}";
+                return $"{Name}/{Helpers.GetApplicationVersion()}";
             }
         }
 
@@ -125,8 +123,13 @@ namespace ShareX.HelpersLib
 
         public static ShareXTheme Theme { get; set; } = ShareXTheme.DarkTheme;
 
-        public static void ApplyTheme(Form form, bool setIcon = true)
+        public static void ApplyTheme(Form form, bool closeOnEscape = false, bool setIcon = true)
         {
+            if (closeOnEscape)
+            {
+                form.CloseOnEscape();
+            }
+
             if (setIcon)
             {
                 form.Icon = Icon;
@@ -164,6 +167,13 @@ namespace ShareX.HelpersLib
 
             switch (control)
             {
+                case ColorButton colorButton:
+                    colorButton.FlatStyle = FlatStyle.Flat;
+                    colorButton.FlatAppearance.BorderColor = Theme.BorderColor;
+                    colorButton.ForeColor = Theme.TextColor;
+                    colorButton.BackColor = Theme.LightBackgroundColor;
+                    colorButton.BorderColor = Theme.BorderColor;
+                    return;
                 case Button btn:
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.FlatAppearance.BorderColor = Theme.BorderColor;

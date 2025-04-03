@@ -178,9 +178,6 @@
   <data name="ScreenshotDelay0S" xml:space="preserve">
     <value>Затримка для знімка: {0}с</value>
   </data>
-  <data name="ApplicationSettingsForm_btnCheckDevBuild_Click_DevBuilds_Warning" xml:space="preserve">
-    <value>Dev-збірки можуть бути нестабільними та повинні використовуватись лише для тестування. Хочете встановити?</value>
-  </data>
   <data name="ActionsForm_btnOK_Click_Name_can_t_be_empty_" xml:space="preserve">
     <value>Назва не може бути порожньою.</value>
   </data>
@@ -293,9 +290,6 @@
   <data name="AboutForm_AboutForm_Language_ko_KR" xml:space="preserve">
     <value>Корейська</value>
   </data>
-  <data name="HotkeyManager_ShowFailedHotkeys_These_applications_could_be_conflicting_" xml:space="preserve">
-    <value>Можливий конфлікт програми:</value>
-  </data>
   <data name="ActionsToolbarEditForm_Separator" xml:space="preserve">
     <value>Роздільник</value>
   </data>
@@ -349,22 +343,13 @@
   <data name="MainForm_UpdateWorkflowsMenu_You_can_add_workflows_from_hotkey_settings___" xml:space="preserve">
     <value>Ви можете додати робочі процеси у налаштуваннях гарячих клавіш...</value>
   </data>
-  <data name="ShareXOpticalCharacterRecognition" xml:space="preserve">
-    <value>ShareX — Оптичне розпізнавання символів</value>
-  </data>
   <data name="AboutForm_AboutForm_Language_ru" xml:space="preserve">
     <value>Російська</value>
-  </data>
-  <data name="ImageData_Write_Error" xml:space="preserve">
-    <value>Неможливо записати зображення до теки {0}.</value>
   </data>
   <data name="ApplicationSettingsForm_cbLanguage_SelectedIndexChanged_Language_Restart" xml:space="preserve">
     <value>Треба перезапустити ShareX, щоб застосувати зміну мови.
 
 Чи хочете Ви перезапустити ShareX?</value>
-  </data>
-  <data name="Program_Run_Error" xml:space="preserve">
-    <value>Помилка</value>
   </data>
   <data name="ApplicationSettingsForm_cbStartWithWindows_Text" xml:space="preserve">
     <value>Запустити ShareX під час запуску Windows</value>
@@ -398,9 +383,6 @@
   </data>
   <data name="SwitchToThumbnailView" xml:space="preserve">
     <value>Перемкнутись у режим мініатюр</value>
-  </data>
-  <data name="MainForm_UpdateMainFormTip_Currently_configured_hotkeys_" xml:space="preserve">
-    <value>Поточні параметри гарячих клавіш:</value>
   </data>
   <data name="RecentManager_UpdateRecentMenu_Left_click_to_copy_URL_to_clipboard__Right_click_to_open_URL_" xml:space="preserve">
     <value>Лівий притиск — для копіювання у буфер обміну. Правий — для відкриття посилання.</value>
@@ -482,9 +464,6 @@
   </data>
   <data name="ActionsToolbar_Close" xml:space="preserve">
     <value>Закрити</value>
-  </data>
-  <data name="PleaseNoteThatShareXIsUsingOCRSpaceSOnlineAPIToPerformOpticalCharacterRecognitionDoYouGivePermissionToShareXToUploadImagesToThisService" xml:space="preserve">
-    <value>Зверніть увагу, що ShareX використовує мережеве API OCR.Space для виконання оптичного розпізнавання символів. Чи даєте Ви дозвіл ShareX на вивантаження зображень до цієї служби?</value>
   </data>
   <data name="TaskSettingsForm_UpdateWindowTitle_Task_settings_for__0_" xml:space="preserve">
     <value>Параметри завдання для {0}</value>

@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2022 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ using Newtonsoft.Json.Linq;
 namespace ShareX.UploadersLib
 {
     // Example: {json:files[0].url}
+    // Example: {json:{response}|files[0].url}
     internal class CustomUploaderFunctionJson : CustomUploaderFunction
     {
         public override string Name { get; } = "json";
@@ -37,16 +38,29 @@ namespace ShareX.UploadersLib
         public override string Call(ShareXCustomUploaderSyntaxParser parser, string[] parameters)
         {
             // https://goessner.net/articles/JsonPath/
-            string jsonPath = parameters[0];
+            string input, jsonPath;
 
-            if (!string.IsNullOrEmpty(jsonPath))
+            if (parameters.Length > 1)
+            {
+                // {json:input|jsonPath}
+                input = parameters[0];
+                jsonPath = parameters[1];
+            }
+            else
+            {
+                // {json:jsonPath}
+                input = parser.ResponseInfo.ResponseText;
+                jsonPath = parameters[0];
+            }
+
+            if (!string.IsNullOrEmpty(input) && !string.IsNullOrEmpty(jsonPath))
             {
                 if (!jsonPath.StartsWith("$."))
                 {
                     jsonPath = "$." + jsonPath;
                 }
 
-                return (string)JToken.Parse(parser.ResponseInfo.ResponseText).SelectToken(jsonPath);
+                return (string)JToken.Parse(input).SelectToken(jsonPath);
             }
 
             return null;

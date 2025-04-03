@@ -97,6 +97,7 @@
             // 
             // lvHistory
             // 
+            this.lvHistory.AllowSelectAll = false;
             this.lvHistory.AutoFillColumn = true;
             this.lvHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lvHistory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -158,6 +159,8 @@
             // 
             // tstbSearch
             // 
+            this.tstbSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.tstbSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.tstbSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.tstbSearch, "tstbSearch");
             this.tstbSearch.Name = "tstbSearch";
@@ -385,7 +388,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.scMain);
-            this.KeyPreview = true;
             this.Name = "HistoryForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HistoryForm_FormClosing);
             this.Shown += new System.EventHandler(this.HistoryForm_Shown);

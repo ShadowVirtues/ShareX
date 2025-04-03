@@ -81,7 +81,7 @@ namespace ShareX.HistoryLib.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured while reading history file:.
+        ///   Looks up a localized string similar to Error occurred while reading history file:.
         /// </summary>
         internal static string ErrorOccuredWhileReadingHistoryFile {
             get {
@@ -489,6 +489,15 @@ namespace ShareX.HistoryLib.Properties {
             get {
                 object obj = ResourceManager.GetObject("notebook", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pin to screen.
+        /// </summary>
+        internal static string PinToScreen {
+            get {
+                return ResourceManager.GetString("PinToScreen", resourceCulture);
             }
         }
         

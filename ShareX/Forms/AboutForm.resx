@@ -181,7 +181,7 @@
     <value>rtbInfo</value>
   </data>
   <data name="&gt;&gt;rtbInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>ShareX.HelpersLib.ReadOnlyRichTextBox, ShareX.HelpersLib, Version=15.0.1.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;rtbInfo.Parent" xml:space="preserve">
     <value>$this</value>
@@ -379,7 +379,7 @@
     <value>cLogo</value>
   </data>
   <data name="&gt;&gt;cLogo.Type" xml:space="preserve">
-    <value>ShareX.HelpersLib.Canvas, ShareX.HelpersLib, Version=13.6.2.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>ShareX.HelpersLib.Canvas, ShareX.HelpersLib, Version=15.0.1.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;cLogo.Parent" xml:space="preserve">
     <value>$this</value>
@@ -406,7 +406,7 @@
     <value>uclUpdate</value>
   </data>
   <data name="&gt;&gt;uclUpdate.Type" xml:space="preserve">
-    <value>ShareX.HelpersLib.UpdateCheckerLabel, ShareX.HelpersLib, Version=13.6.2.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>ShareX.HelpersLib.UpdateCheckerLabel, ShareX.HelpersLib, Version=15.0.1.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;uclUpdate.Parent" xml:space="preserve">
     <value>$this</value>
@@ -422,9 +422,6 @@
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>684, 593</value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>600, 600</value>

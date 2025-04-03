@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2022 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@ namespace ShareX.UploadersLib
     // Example: {regex:(?<=href=").+(?=")}
     // Example: {regex:href="(.+)"|1}
     // Example: {regex:href="(?<url>.+)"|url}
+    // Example: {regex:{response}|href="(.+)"|1}
     internal class CustomUploaderFunctionRegex : CustomUploaderFunction
     {
         public override string Name { get; } = "regex";
@@ -38,28 +39,43 @@ namespace ShareX.UploadersLib
 
         public override string Call(ShareXCustomUploaderSyntaxParser parser, string[] parameters)
         {
-            string pattern = parameters[0];
+            string input, pattern, group = "";
 
-            if (!string.IsNullOrEmpty(pattern))
+            if (parameters.Length > 2)
             {
-                Match match = Regex.Match(parser.ResponseInfo.ResponseText, pattern);
+                // {regex:input|pattern|group}
+                input = parameters[0];
+                pattern = parameters[1];
+                group = parameters[2];
+            }
+            else
+            {
+                // {regex:pattern}
+                input = parser.ResponseInfo.ResponseText;
+                pattern = parameters[0];
+
+                if (parameters.Length > 1)
+                {
+                    // {regex:pattern|group}
+                    group = parameters[1];
+                }
+            }
+
+            if (!string.IsNullOrEmpty(input) && !string.IsNullOrEmpty(pattern))
+            {
+                Match match = Regex.Match(input, pattern);
 
                 if (match.Success)
                 {
-                    if (parameters.Length > 1)
+                    if (!string.IsNullOrEmpty(group))
                     {
-                        string group = parameters[1];
-
-                        if (!string.IsNullOrEmpty(group))
+                        if (int.TryParse(group, out int groupNumber))
                         {
-                            if (int.TryParse(group, out int groupNumber))
-                            {
-                                return match.Groups[groupNumber].Value;
-                            }
-                            else
-                            {
-                                return match.Groups[group].Value;
-                            }
+                            return match.Groups[groupNumber].Value;
+                        }
+                        else
+                        {
+                            return match.Groups[group].Value;
                         }
                     }
 

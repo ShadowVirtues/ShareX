@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2022 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@ using ShareX.HistoryLib;
 using ShareX.Properties;
 using ShareX.ScreenCaptureLib;
 using ShareX.UploadersLib;
-using ShareX.UploadersLib.FileUploaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -192,38 +191,62 @@ namespace ShareX
 
         private static void ApplicationConfigBackwardCompatibilityTasks()
         {
-            if (Settings.IsUpgradeFrom("11.4.1"))
+            if (SystemOptions.DisableUpload)
             {
-                RegionCaptureOptions regionCaptureOptions = DefaultTaskSettings.CaptureSettings.SurfaceOptions;
-                regionCaptureOptions.AnnotationOptions = new AnnotationOptions();
-                regionCaptureOptions.LastRegionTool = ShapeType.RegionRectangle;
-                regionCaptureOptions.LastAnnotationTool = ShapeType.DrawingRectangle;
+                DefaultTaskSettings.AfterCaptureJob = DefaultTaskSettings.AfterCaptureJob.Remove(AfterCaptureTasks.UploadImageToHost);
             }
 
-            if (Settings.IsUpgradeFrom("11.5.0"))
+            if (Settings.IsUpgradeFrom("14.1.1"))
             {
-                if (File.Exists(Program.ChromeHostManifestFilePath))
+                if (Helpers.IsDefaultSettings(Settings.Themes, ShareXTheme.GetDefaultThemes(), (x, y) => x.Name == y.Name))
                 {
-                    IntegrationHelpers.CreateChromeExtensionSupport(true);
+                    if (!Settings.Themes.IsValidIndex(Settings.SelectedTheme))
+                    {
+                        Settings.SelectedTheme = 0;
+                    }
+
+                    ShareXTheme selectedTheme = Settings.Themes[Settings.SelectedTheme];
+
+                    Settings.Themes = ShareXTheme.GetDefaultThemes();
+
+                    int index = Settings.Themes.FindIndex(x => x.Name.Equals(selectedTheme.Name, StringComparison.OrdinalIgnoreCase));
+
+                    if (index >= 0)
+                    {
+                        Settings.SelectedTheme = index;
+                    }
+                    else
+                    {
+                        Settings.SelectedTheme = 0;
+                    }
                 }
             }
 
-            if (Settings.IsUpgradeFrom("13.0.2"))
+            if (Settings.IsUpgradeFrom("14.1.2"))
             {
-                Settings.UseCustomTheme = Settings.UseDarkTheme;
+                if (!Environment.Is64BitOperatingSystem && !string.IsNullOrEmpty(DefaultTaskSettings.CaptureSettings.FFmpegOptions.CLIPath))
+                {
+                    DefaultTaskSettings.CaptureSettings.FFmpegOptions.OverrideCLIPath = true;
+                }
             }
 
-            if (Settings.IsUpgradeFrom("13.3.1") && Settings.Themes != null)
+            if (Settings.IsUpgradeFrom("15.0.1"))
             {
-                Settings.Themes.Add(ShareXTheme.NordDarkTheme);
-                Settings.Themes.Add(ShareXTheme.NordLightTheme);
-                Settings.Themes.Add(ShareXTheme.DraculaTheme);
+                DefaultTaskSettings.CaptureSettings.ScrollingCaptureOptions = new ScrollingCaptureOptions();
+                DefaultTaskSettings.CaptureSettings.FFmpegOptions.FixSources();
             }
 
-            if (Settings.IsUpgradeFrom("13.4.0"))
+            if (Settings.IsUpgradeFrom("16.0.2"))
             {
-                DefaultTaskSettings.GeneralSettings.ShowToastNotificationAfterTaskCompleted =
-                    DefaultTaskSettings.GeneralSettings.PopUpNotification != PopUpNotificationType.None;
+                if (Settings.CheckPreReleaseUpdates)
+                {
+                    Settings.UpdateChannel = UpdateChannel.PreRelease;
+                }
+
+                if (!DefaultTaskSettings.CaptureSettings.SurfaceOptions.UseDimming)
+                {
+                    DefaultTaskSettings.CaptureSettings.SurfaceOptions.BackgroundDimStrength = 0;
+                }
             }
         }
 
@@ -251,80 +274,97 @@ namespace ShareX
 
         private static void UploadersConfigBackwardCompatibilityTasks()
         {
-            if (UploadersConfig.IsUpgradeFrom("11.6.0"))
-            {
-                if (UploadersConfig.DropboxURLType == DropboxURLType.Direct)
-                {
-                    UploadersConfig.DropboxUseDirectLink = true;
-                }
-
-                if (!string.IsNullOrEmpty(UploadersConfig.AmazonS3Settings.Endpoint))
-                {
-                    bool endpointFound = false;
-
-                    foreach (AmazonS3Endpoint endpoint in AmazonS3.Endpoints)
-                    {
-                        if (endpoint.Region != null && endpoint.Region.Equals(UploadersConfig.AmazonS3Settings.Endpoint, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            UploadersConfig.AmazonS3Settings.Endpoint = endpoint.Endpoint;
-                            UploadersConfig.AmazonS3Settings.Region = endpoint.Region;
-                            endpointFound = true;
-                            break;
-                        }
-                    }
-
-                    if (!endpointFound)
-                    {
-                        UploadersConfig.AmazonS3Settings.Endpoint = "";
-                    }
-                }
-            }
-
             if (UploadersConfig.CustomUploadersList != null)
             {
                 foreach (CustomUploaderItem cui in UploadersConfig.CustomUploadersList)
                 {
-                    cui.CheckBackwardCompatibility();
+                    try
+                    {
+                        cui.CheckBackwardCompatibility();
+                    }
+                    catch
+                    {
+                    }
                 }
             }
         }
 
         private static void HotkeysConfigBackwardCompatibilityTasks()
         {
-            if (HotkeysConfig.IsUpgradeFrom("13.1.1"))
+            if (SystemOptions.DisableUpload)
             {
                 foreach (TaskSettings taskSettings in HotkeysConfig.Hotkeys.Select(x => x.TaskSettings))
                 {
-                    if (taskSettings != null && !string.IsNullOrEmpty(taskSettings.AdvancedSettings.CapturePath))
+                    if (taskSettings != null)
                     {
-                        taskSettings.OverrideScreenshotsFolder = true;
-                        taskSettings.ScreenshotsFolder = taskSettings.AdvancedSettings.CapturePath;
-                        taskSettings.AdvancedSettings.CapturePath = "";
+                        taskSettings.AfterCaptureJob = taskSettings.AfterCaptureJob.Remove(AfterCaptureTasks.UploadImageToHost);
+                    }
+                }
+            }
+
+            if (Settings.IsUpgradeFrom("15.0.1"))
+            {
+                foreach (TaskSettings taskSettings in HotkeysConfig.Hotkeys.Select(x => x.TaskSettings))
+                {
+                    if (taskSettings != null && taskSettings.CaptureSettings != null)
+                    {
+                        taskSettings.CaptureSettings.ScrollingCaptureOptions = new ScrollingCaptureOptions();
+                        taskSettings.CaptureSettings.FFmpegOptions.FixSources();
                     }
                 }
             }
         }
 
+        public static void CleanupHotkeysConfig()
+        {
+            foreach (TaskSettings taskSettings in HotkeysConfig.Hotkeys.Select(x => x.TaskSettings))
+            {
+                taskSettings.Cleanup();
+            }
+        }
+
         public static void SaveAllSettings()
         {
-            if (Settings != null) Settings.Save(ApplicationConfigFilePath);
-            if (UploadersConfig != null) UploadersConfig.Save(UploadersConfigFilePath);
-            if (HotkeysConfig != null) HotkeysConfig.Save(HotkeysConfigFilePath);
+            if (Settings != null)
+            {
+                Settings.Save(ApplicationConfigFilePath);
+            }
+
+            if (UploadersConfig != null)
+            {
+                UploadersConfig.Save(UploadersConfigFilePath);
+            }
+
+            if (HotkeysConfig != null)
+            {
+                CleanupHotkeysConfig();
+                HotkeysConfig.Save(HotkeysConfigFilePath);
+            }
         }
 
         public static void SaveApplicationConfigAsync()
         {
-            if (Settings != null) Settings.SaveAsync(ApplicationConfigFilePath);
+            if (Settings != null)
+            {
+                Settings.SaveAsync(ApplicationConfigFilePath);
+            }
         }
 
         public static void SaveUploadersConfigAsync()
         {
-            if (UploadersConfig != null) UploadersConfig.SaveAsync(UploadersConfigFilePath);
+            if (UploadersConfig != null)
+            {
+                UploadersConfig.SaveAsync(UploadersConfigFilePath);
+            }
         }
 
         public static void SaveHotkeysConfigAsync()
         {
-            if (HotkeysConfig != null) HotkeysConfig.SaveAsync(HotkeysConfigFilePath);
+            if (HotkeysConfig != null)
+            {
+                CleanupHotkeysConfig();
+                HotkeysConfig.SaveAsync(HotkeysConfigFilePath);
+            }
         }
 
         public static void SaveAllSettingsAsync()

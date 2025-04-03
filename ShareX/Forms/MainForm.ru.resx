@@ -567,12 +567,6 @@
   <data name="tsmiURLSharingServices.Text" xml:space="preserve">
     <value>Сервисы отправки ссылок</value>
   </data>
-  <data name="tsmiTrayTextCapture.Text" xml:space="preserve">
-    <value>Захват текста (OCR)...</value>
-  </data>
-  <data name="tsmiTextCapture.Text" xml:space="preserve">
-    <value>Захват текста (OCR)...</value>
-  </data>
   <data name="tsmiDownloadSelectedURL.Text" xml:space="preserve">
     <value>Скачать</value>
   </data>
@@ -737,5 +731,50 @@
   </data>
   <data name="tsmiTrayBorderlessWindow.Text" xml:space="preserve">
     <value>Безрамочное окно...</value>
+  </data>
+  <data name="tsmiTrayOCR.Text" xml:space="preserve">
+    <value>Распознавание текста (OCR)...</value>
+  </data>
+  <data name="tsmiImageViewer.Text" xml:space="preserve">
+    <value>Просмотр изображений...</value>
+  </data>
+  <data name="tsmiTrayImageViewer.Text" xml:space="preserve">
+    <value>Просмотр изображений...</value>
+  </data>
+  <data name="tsmiOCR.Text" xml:space="preserve">
+    <value>Распознавание текста (OCR)...</value>
+  </data>
+  <data name="tsmiPinSelectedFile.Text" xml:space="preserve">
+    <value>Закрепить на экране</value>
+  </data>
+  <data name="tsmiPinToScreen.Text" xml:space="preserve">
+    <value>Закрепить на экране...</value>
+  </data>
+  <data name="tsmiTrayPinToScreen.Text" xml:space="preserve">
+    <value>Закрепить на экране...</value>
+  </data>
+  <data name="tsmiImageBeautifier.Text" xml:space="preserve">
+    <value>Украшатель изображений...</value>
+  </data>
+  <data name="tsmiTrayImageBeautifier.Text" xml:space="preserve">
+    <value>Украшатель изображений...</value>
+  </data>
+  <data name="tsmiBeautifyImage.Text" xml:space="preserve">
+    <value>Украсить изображение...</value>
+  </data>
+  <data name="tsmiTrayHashChecker.Text" xml:space="preserve">
+    <value>Проверка хеша...</value>
+  </data>
+  <data name="tsmiHashChecker.Text" xml:space="preserve">
+    <value>Проверка хеша...</value>
+  </data>
+  <data name="cDescription.HeaderText" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="cHotkey.HeaderText" xml:space="preserve">
+    <value>Клавиши</value>
+  </data>
+  <data name="tsbX.Text" xml:space="preserve">
+    <value>Читать @ShareX...</value>
   </data>
 </root>
