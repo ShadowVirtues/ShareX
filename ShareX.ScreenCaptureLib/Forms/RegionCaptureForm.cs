@@ -221,7 +221,7 @@ namespace ShareX.ScreenCaptureLib
             else
             {
                 FormBorderStyle = FormBorderStyle.Sizable;
-                MinimumSize = new Size(400, 100);  //So toolbar doesn't get shrank
+                MinimumSize = new Size(400, 150);  //So toolbar doesn't get shrank past the pen tool
 
                 if (Options.ImageEditorStartMode == ImageEditorStartMode.PreviousState)
                 {
@@ -821,6 +821,10 @@ namespace ShareX.ScreenCaptureLib
             else if (DoesCanvasNeedZoom())  //If at 100% zoom and it needs zoom, then make fit the canvas
             {
                 ZoomToFit();
+            }
+            else    //If at 100% zoom and it doesn't need zoom, center canvas. Useful to counteract the panning bugs and inconsistencies that I cba to fix.
+            {
+                CenterCanvas();
             }
 
         }
@@ -1667,6 +1671,7 @@ namespace ShareX.ScreenCaptureLib
         private void SaveImageToTemp()
         {
             Bitmap bmp = ReceiveImageForTask();
+            //Hard saving to documents, even if profile location is somewhere else, since I wouldn't want other drives to start working just because of a screenshot
             string folder = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\ShareX\\Screenshots";
             string fileName = $"{DateTime.Now:yyyy.MM.dd HH.mm.ss-ff}.png";
             if (System.IO.Directory.Exists(folder))
